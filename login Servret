@@ -1,0 +1,78 @@
+package web;
+
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+public class loginServlet extends HttpServlet {
+
+	//dopostを使ってlogin.jspから受け取る
+@Override
+protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+		throws ServletException, IOException {
+
+System.out.println("Servlet開始");
+	HttpSession session = req.getSession(true);
+
+	 //送信されたものに対して文字コードを設定する
+	req.setCharacterEncoding("UTF-8");
+
+
+
+//getParameterを使ってlogin,jspからname,passを呼び出す
+	//を取得してString型のname,pwに格納する
+	String name=req.getParameter("name");
+	String pw=req.getParameter("pass");
+
+
+if(name==""||pw=="") {
+	System.out.println("入力されてません");
+	req.setAttribute("errormsg","入力してください");
+
+	RequestDispatcher rd = req.getRequestDispatcher("login.jsp");
+	rd.forward(req, resp);
+
+
+}else {
+	//どちらも入力した場合
+
+
+
+	//LogicJDBCクラスをインスタンス化
+	LoginJDBC login = new LoginJDBC();
+
+	//LogicJDBCクラスのexecuteメソッドを呼び出す。引数が name と pass
+	boolean flg =login.execute(name,pw);
+
+	//↑executeで呼び出した引数をflgに入れる
+
+
+	if(flg) {
+
+		 System.out.println("b");
+		//ログイン結果がtrueだったらSearch.jspにとぶ
+		RequestDispatcher rd = req.getRequestDispatcher("/jsp/Search.jsp");
+		rd.forward(req, resp);
+
+	}else {
+		System.out.println("a");
+
+
+		req.setAttribute("errormsg","入力が間違えてます");
+		RequestDispatcher rd = req.getRequestDispatcher("login.jsp");
+		rd.forward(req, resp);
+
+		//ログイン結果がfalseだったらlogin.jspに戻る
+	}
+
+}
+
+
+
+}
+	}
