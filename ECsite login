@@ -1,0 +1,48 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>LogIn</title>
+</head>
+<body>
+
+<%
+
+Object s = request.getAttribute("errormsg");
+if(s!=null){
+
+%>
+<div style="text-align:center"><font size ="3" color= "red" align="center"><%=s%></font></div>
+<%} %>
+
+
+<h1>ログイン</h1>
+
+<%-- 設定した値を（dopost）でLoginServletに送る--%>
+<form action="login" method ="post">
+
+<%-- IDとパスワードにパラメーター名を設定する--%>
+<table>
+<tr>
+<th>名前</th>
+<td><input type = "text" name ="name"></td>
+</tr>
+
+<tr>
+<th>パスワード</th>
+<td><input type ="password" name ="pass"></td>
+</tr>
+
+
+</table>
+
+<input type ="submit" value ="LOGIN">
+
+
+
+</form>
+
+</body>
+</html>
