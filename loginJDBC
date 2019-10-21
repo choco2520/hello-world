@@ -1,0 +1,99 @@
+package web;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class LoginJDBC {
+
+	//loginServletのexecuteから引数を持ってくる
+	//メソッドを書く
+	public boolean execute (String name,String pw) {
+
+		//flgの部屋に鍵をかける
+		boolean flg = false;
+
+		//DBに接続するための情報を変数に格納する
+		String url = "jdbc:mysql://localhost/ECsite01";
+		String id  = "root";
+		String pass ="password";
+
+
+		//DBにアクセスする際に必要な部品を定義
+		Connection cnct = null;
+		Statement st= null;
+		ResultSet rs =null;
+
+
+
+		try {
+
+			//mysqlのjdbcドライバーに読み込ませる
+
+			Class.forName("com.mysql.jdbc.Driver");
+
+
+			cnct =DriverManager.getConnection(url,id,pass);
+
+			st = cnct.createStatement();
+
+			rs = st.executeQuery("SELECT * from user ");
+
+//rsに格納されている実行結果を一行一行見る
+			while(rs.next()) {
+
+//rsに格納されてるdbの中身をname1、pass1に格納
+				String name1 = rs.getString("user_name");
+
+				String pass1 = rs.getString("login_pw");
+
+//もしデーターベースの中身とパラメーターがいっちした時
+				if ((name.equals(name1))&&(pw.equals(pass1))) {
+
+					//ログイン成功したとき
+					//flgの中身はtrueが格納される
+
+					flg = true;
+
+				}else {
+
+					//失敗したとき
+					flg = false;
+				}
+
+			}
+
+
+
+		}catch(ClassNotFoundException ex) {
+			ex.printStackTrace();
+
+			//SQLExceptionが起きた時トレースを発行する
+		}catch(SQLException ex) {
+			ex.printStackTrace();
+
+			//finallyはエラーの発生有無にaかかわらず実行される。
+		}finally {
+
+			try {
+
+				//各部分はDBの」処理が終わったら閉じなければならない。
+				//閉じる順番も大切！！
+				//rsをclose	する。
+				if(rs!=null) rs.close();
+				//stをcloseする
+				if(st!=null) st.close();
+				//cnctをcloseする
+				if(cnct!=null) cnct.close();
+
+
+			} catch(Exception ex) { }
+		}
+
+//returnでloginServletのｆｌｇに返す
+		return flg;
+	}
+}
+
