@@ -1,0 +1,86 @@
+package web;
+
+import java.io.Serializable;
+
+public class SearchBean implements Serializable{
+
+
+	private String Pro_name ="";
+	private String Pro_price="";
+	private String Pro_img="";
+    private String Stock_no="";
+    private String Cat_id="";
+    private String Pro_msg="";
+    private String Pro_cd="";
+    private String cat_name="";
+
+    private String Stock_no2="";
+
+
+
+
+
+
+    public String getStock_no2() {
+		return Stock_no2;
+	}
+	public void setStock_no2(String stock_no2) {
+		Stock_no2 = stock_no2;
+	}
+	public String getCat_name() {
+		return cat_name;
+	}
+	public void setCat_name(String cat_name) {
+		this.cat_name = cat_name;
+	}
+	public String getPro_cd() {
+		return Pro_cd;
+	}
+	public void setPro_cd(String pro_cd) {
+		Pro_cd = pro_cd;
+	}
+	public String getPro_img() {
+		return Pro_img;
+	}
+	public void setPro_img(String pro_img) {
+		Pro_img = pro_img;
+	}
+	public String getStock_no() {
+		return Stock_no;
+	}
+	public void setStock_no(String stock_no) {
+		Stock_no = stock_no;
+	}
+	public String getCat_id() {
+		return Cat_id;
+	}
+	public void setCat_id(String cat_id) {
+		Cat_id = cat_id;
+	}
+	public String getPro_msg() {
+		return Pro_msg;
+	}
+	public void setPro_msg(String pro_msg) {
+		Pro_msg = pro_msg;
+	}
+
+
+
+
+
+
+	public String getPro_name() {
+		return Pro_name;
+	}
+	public void setPro_name(String pro_name) {
+		Pro_name = pro_name;
+	}
+	public String getPro_price() {
+		return Pro_price;
+	}
+	public void setPro_price(String pro_price) {
+		Pro_price = pro_price;
+	}
+
+}
+
