@@ -1,0 +1,94 @@
+package web;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+public class SearchServlet extends HttpServlet {
+
+//dopostでSearch.jspを受け取る
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+
+		//sessionが継続してるか確認
+		 HttpSession session =req.getSession(false);
+
+		  //sessionの中身を判断してnullの場合はブロックの中身が実行される
+		  if(session == null) {
+				  return;
+
+
+		  }
+
+		  //ArrayListをここのクラスでも使えるようにするために宣誓
+		ArrayList<SearchBean> item =new ArrayList<SearchBean>();
+
+		req.setCharacterEncoding("UTF-8");
+
+		//get.Parameterでsearch.jspのパラメーター"search"を格納する
+         String sea =req.getParameter("search");
+         String kate =req.getParameter("kategori");
+
+
+
+
+
+
+         //もしsea（search）とcategoryの中身が空ではない時
+
+         if(sea != ""&& kate !="null") {
+			//SearchJDBCクラスをインスタンス化
+			SearchJDBC searchp = new SearchJDBC();
+
+	//SearchJDBCクラスのexecuteメソッドを呼び出す
+			item = searchp.execute(sea);
+
+
+			//もしseaの中身が書いてあれば
+		}else if(sea !="") {
+			//SearchJDBCクラスをインスタンス化
+			SearchJDBC searchp = new SearchJDBC();
+
+	//SearchJDBCクラスのexecuteメソッドを呼び出す
+			item = searchp.execute(sea);
+
+
+			//もしカテゴリーの中身が書いてあれば
+
+		}else if(kate !="null") {//SearchJDBCクラスをインスタンス化
+			SearchJDBC searchp = new SearchJDBC();
+
+	//SearchJDBCクラスのexecuteメソッドを呼び出す
+			item = searchp.kate(kate);
+
+
+		}else {
+
+
+
+			System.out.println("入力してください");
+
+
+
+
+		}
+
+
+		//ITEMの箱にSearchJDBCでDBの中身を格納したitemを入れる
+		session.setAttribute("ITEM",item);
+
+		//RequestDispatcherを使ってこの情報をProductDetailに送る
+			RequestDispatcher rd = req.getRequestDispatcher("/jsp/Searchresult.jsp");
+			rd.forward(req, resp);
+
+
+			}
+	}
+
