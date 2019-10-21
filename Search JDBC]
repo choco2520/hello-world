@@ -1,0 +1,196 @@
+
+package web;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+public class SearchJDBC {
+
+	//ArrrayListメソッド
+
+
+	public 	ArrayList<SearchBean> execute(String search) {
+
+
+		//SearchBeanクラスをインスタンス化する
+
+		//Stringの要素を格納するためのArrayListを用意。箱の名前はitem。
+		ArrayList<SearchBean> item =new ArrayList<SearchBean>();
+
+//DBに接続するための必要な情報を変数定義、接続する場所を定義
+	String url = "jdbc:mysql://localhost/ECsite01";
+	String id  = "root";
+	String pass ="password";
+
+	//DBに接続するための必要な部品を定義
+	Connection cnct = null;
+	Statement st= null;
+	ResultSet rs =null;
+
+
+
+	try {
+
+		//mysqlのjdbcドライバーに読み込ませる記述
+		Class.forName("com.mysql.jdbc.Driver");
+
+		//引数をもとに実際にDBに接続する
+		cnct =DriverManager.getConnection(url,id,pass);
+		//生成後にSTに接続情報を代入する
+		st = cnct.createStatement();
+
+
+
+
+		//DBに接続してsearchで検索した文字をselectする⇒queryに情報を格納する
+		String query = "SELECT * from product where pro_name ='"+search+"'";
+		System.out.println(query);
+
+		//rsにDBから引っ張て来た情報が入ったqueryを格納する
+		rs = st.executeQuery(query);
+
+		//中身を一つずつ見ていく
+		while(rs.next()) {
+			SearchBean bean = new SearchBean();
+		//beanに格納結果をSetしていく（Search Beanではgetでこの結果をもらう）
+        bean.setPro_price(rs.getString("pro_price"));
+        bean.setPro_name(rs.getString("pro_name"));
+        bean.setPro_img(rs.getString("pro_img"));
+        bean.setStock_no(rs.getString("stock_no"));
+        bean.setCat_id(rs.getString("cat_id"));
+        bean.setPro_msg(rs.getString("pro_msg"));
+        bean.setPro_cd(rs.getString("pro_cd"));
+
+
+        //item（ArrayList）に追加していく
+        item.add(bean);
+			}
+
+
+
+
+	}catch(ClassNotFoundException ex) {
+		ex.printStackTrace();
+
+		//SQLExceptionが起きた時トレースを発行する
+	}catch(SQLException ex) {
+		ex.printStackTrace();
+
+		//finallyはエラーの発生有無にaかかわらず実行される。
+	}finally {
+
+		try {
+
+			//各部分はDBの」処理が終わったら閉じなければならない。
+			//閉じる順番も大切！！
+			//rsをclose	する。
+			if(rs!=null) rs.close();
+			//stをcloseする
+			if(st!=null) st.close();
+			//cnctをcloseする
+			if(cnct!=null) cnct.close();
+
+
+		} catch(Exception ex) { }
+	}
+
+//結果をSearchServletのitemに返す
+	return item;
+}
+
+//カテゴリ検索
+public 	ArrayList<SearchBean> kate(String kategori) {
+
+
+
+	//Stringの要素を格納するためのArrayListを用意。箱の名前はitem。
+	ArrayList<SearchBean> item =new ArrayList<SearchBean>();
+
+//DBに接続するための必要な情報を変数定義、接続する場所を定義
+String url = "jdbc:mysql://localhost/ECsite01";
+String id  = "root";
+String pass ="password";
+
+//DBに接続するための必要な部品を定義
+Connection cnct = null;
+Statement st= null;
+ResultSet rs =null;
+
+
+
+try {
+
+	//mysqlのjdbcドライバーに読み込ませる記述
+	Class.forName("com.mysql.jdbc.Driver");
+
+	//引数をもとに実際にDBに接続する
+	cnct =DriverManager.getConnection(url,id,pass);
+	//生成後にSTに接続情報を代入する
+	st = cnct.createStatement();
+
+
+
+	//kategori="￥"" +kategori + "\"";
+
+	//DBに接続してsearchで検索した文字をselectする⇒queryに情報を格納する
+	String query = "SELECT * from product where cat_id ='"+kategori+"'";
+	System.out.println(query);
+
+	//rsにDBから引っ張て来た情報が入ったqueryを格納する
+	rs = st.executeQuery(query);
+
+
+	//中身を一つずつ見ていく
+	while(rs.next()) {
+		//SearchBeanクラスをインスタンス化する
+		SearchBean bean = new SearchBean();
+	//beanに格納結果をSetしていく（Search Beanではgetでこの結果をもらう）
+    bean.setPro_price(rs.getString("pro_price"));
+    bean.setPro_name(rs.getString("pro_name"));
+    bean.setPro_img(rs.getString("pro_img"));
+    bean.setStock_no(rs.getString("stock_no"));
+    bean.setCat_id(rs.getString("cat_id"));
+    bean.setPro_msg(rs.getString("pro_msg"));
+    bean.setPro_cd(rs.getString("pro_cd"));
+
+
+    //item（ArrayList）に追加していく
+    item.add(bean);
+		}
+
+
+
+
+}catch(ClassNotFoundException ex) {
+	ex.printStackTrace();
+
+	//SQLExceptionが起きた時トレースを発行する
+}catch(SQLException ex) {
+	ex.printStackTrace();
+
+	//finallyはエラーの発生有無にaかかわらず実行される。
+}finally {
+
+	try {
+
+		//各部分はDBの」処理が終わったら閉じなければならない。
+		//閉じる順番も大切！！
+		//rsをclose	する。
+		if(rs!=null) rs.close();
+		//stをcloseする
+		if(st!=null) st.close();
+		//cnctをcloseする
+		if(cnct!=null) cnct.close();
+
+
+	} catch(Exception ex) { }
+}
+
+//結果をSearchServletのitemに返す
+return item;
+}
+}
